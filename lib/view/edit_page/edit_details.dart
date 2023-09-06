@@ -10,7 +10,7 @@ import 'package:student_record/view/edit_page/widgets/form_fields.dart';
 import 'package:student_record/utils/validation/validation.dart';
 
 // ignore: must_be_immutable
-class EditDetails extends GetView<StudentController> {
+class EditDetails extends StatelessWidget {
   final StudentController studentController = Get.put(StudentController());
   EditDetails({super.key, required this.data});
   final Student data;
@@ -20,18 +20,21 @@ class EditDetails extends GetView<StudentController> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController mailController = TextEditingController();
 
-  initializingValues() {
-    nameController.text = data.name;
-    ageController.text = data.age;
-    phoneController.text = data.phone;
-    mailController.text = data.mail;
-    studentController.studentImg.value = data.image!;
-  }
+  // initializingValues() {
+  //   nameController.text = data.name;
+  //   ageController.text = data.age;
+  //   phoneController.text = data.phone;
+  //   mailController.text = data.mail;
+  //   studentController.studentImg.value = data.image!;
+  // }
 
   XFile? pickImg;
   @override
   Widget build(BuildContext context) {
-    initializingValues();
+    List<dynamic> currentValues = [
+      data.name,data.age,data.phone,data.mail
+    ];
+    // initializingValues();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -74,6 +77,7 @@ class EditDetails extends GetView<StudentController> {
                     ),
                     kheight,
                     EditFormFieldWidget(
+                      initalValue: currentValues[0] ,
                       data: data.name,
                       controllers: nameController,
                       hint: 'Name',
@@ -81,6 +85,7 @@ class EditDetails extends GetView<StudentController> {
                     ),
                     kheight,
                     EditFormFieldWidget(
+                       initalValue: currentValues[1] ,
                       data: data.age,
                       controllers: ageController,
                       hint: 'Age',
@@ -88,6 +93,7 @@ class EditDetails extends GetView<StudentController> {
                     ),
                     kheight,
                     EditFormFieldWidget(
+                       initalValue: currentValues[2] ,
                       data: data.phone,
                       controllers: phoneController,
                       hint: 'Phone',
@@ -95,6 +101,7 @@ class EditDetails extends GetView<StudentController> {
                     ),
                     kheight,
                     EditFormFieldWidget(
+                       initalValue: currentValues[3] ,
                       data: data.mail,
                       controllers: mailController,
                       hint: 'Gmail',
@@ -133,22 +140,19 @@ class EditDetails extends GetView<StudentController> {
   void submitClick(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
       return;
-    } else if (studentController.studentImg.value.isEmpty) {
-      Get.snackbar(
-        "Image",
-        'Image is required',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+    }
+    _formKey.currentState!.validate();
+    if (studentController.studentImg.value.isEmpty) {
       return;
     }
-    final name = nameController.text;
-    final age = ageController.text;
-    final phone = phoneController.text;
-    final mail = mailController.text;
-    final image = studentController.studentImg.value;
-
+  
     final updateStudentData =
-        Student(name: name, age: age, phone: phone, mail: mail, image: image);
+        Student(name: nameController.text,
+         age: ageController.text,         
+          phone: phoneController.text,
+           mail: mailController.text,
+            image: studentController.studentImg.value
+            );
     await studentController.updateStudent(updateStudentData, data.id!);
     Get.back();
     pickImg = null;

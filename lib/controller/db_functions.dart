@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:student_record/model/model.dart';
@@ -48,16 +47,18 @@ class Sql with ChangeNotifier {
     return studentList;
   }
 
-  Future<bool> updateTable(Student model, int id) async {
-    try {
-      await db.rawUpdate(
+  updateTable(Student model, int id) async {
+     await db.rawUpdate(
           'UPDATE Student SET name= ?,age= ?,phone= ?,mail= ?,image= ? WHERE id= ?',
-          [model.name, model.age, model.phone, model.id,model.mail,model.image,id]);
-      await getData();
-    } catch (e) {
-      return false;
-    }
-    return true;
+          [
+            model.name,
+            model.age,
+            model.phone,
+            model.id,
+            model.mail,
+            model.image,
+            id
+          ]);
   }
 
   Future<void> deleteData(int id) async {

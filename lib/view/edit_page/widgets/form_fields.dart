@@ -7,18 +7,20 @@ class EditFormFieldWidget extends StatelessWidget {
     super.key,
     required this.controllers,
     required this.hint,
-    required this.function,  this.data,
+    required this.function,  this.data,  this.initalValue,
   });
   final Function function;
   final String hint;
   final TextEditingController controllers;
   final String? data;
+  final String? initalValue;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: sHeight*.07,
       child: TextFormField(
+        initialValue: initalValue,
         controller: controllers,
         validator: (value) {
           if (value!.isEmpty) {
