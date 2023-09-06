@@ -5,7 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:student_record/constants/const.dart';
 import 'package:student_record/controller/student_controller.dart';
 import 'package:student_record/model/model.dart';
-import 'package:student_record/view/add_page/widgets/form_fields.dart';
+import 'package:student_record/utils/image/imagePicker.dart';
+import 'package:student_record/validation/validation.dart';
+import 'package:student_record/view/edit_page/widgets/form_fields.dart';
 
 // ignore: must_be_immutable
 class Registration extends StatelessWidget {
@@ -36,8 +38,11 @@ class Registration extends StatelessWidget {
                   kheight,
                   InkWell(
                     onTap: () async {
-                      await picImgToRxString();
-                    },
+                              pickImg = await imagePicker();
+                              if (pickImg != null) {
+                                studentController.studentImg(pickImg!.path);
+                              }
+                            },
                     child: Obx(() {
                       return studentController.studentImg.value.isEmpty
                           ? const CircleAvatar(
@@ -52,25 +57,26 @@ class Registration extends StatelessWidget {
                     }),
                   ),
                   kheight,
-                  FormFieldWidget(
+                  EditFormFieldWidget(
                     controllers: nameController,
+                    
                     hint: 'Name',
-                    value: (values) {
-                      if (values == null || values.isEmpty) {
-                        return 'Enter name';
-                      }
-                      return 'dfdfdf';
-                    },
+                   function: isValidName,
                   ),
                   kheight,
-                  FormFieldWidget(
+                  EditFormFieldWidget(
+                    function: isValidAge,
                     controllers: ageController,
                     hint: 'Age',
+                    
                   ),
                   kheight,
-                  FormFieldWidget(controllers: phoneController, hint: 'Phone'),
+                  EditFormFieldWidget(
+                    function: isValidMobileNumber,
+                    controllers: phoneController, hint: 'Phone'),
                   kheight,
-                  FormFieldWidget(
+                  EditFormFieldWidget(
+                    function: isValidEmail,
                     controllers: mailController,
                     hint: 'Gmail',
                   ),
@@ -79,10 +85,10 @@ class Registration extends StatelessWidget {
                     height: sHeight*.059,
                     width: sWidth/2.5,
                     child: MaterialButton(
-                      shape: RoundedRectangleBorder(
+                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7)),
                       onPressed: () {
-                        submitClick();
+                        submitClick(context);
                       },
                       color:const Color.fromARGB(84, 104, 126, 169),
                       child: const Text(
@@ -103,31 +109,15 @@ class Registration extends StatelessWidget {
     );
   }
 
-  Future<void> picImgToRxString() async {
-    pickImg = await pickImage();
-    if (pickImg != null) {
-      studentController.studentImg.value = pickImg!.path;
-    }
-  }
-
-  pickImage() async {
-    try {
-      final pic = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (pic == null) {
-        return Exception('no image');
-      }
-      return pic;
-    } catch (e) {
-      return (e);
-    }
-  }
-
-  void submitClick() async {
-    StudentController().getAllStudents();
-
-    if (nameController.text.isEmpty ||
-        ageController.text.isEmpty ||
-        phoneController.text.isEmpty) {
+    void submitClick(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    } else if (pickImg == null) {
+      Get.snackbar(
+        "Image",
+        'Image is required',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     final name = nameController.text;
@@ -140,7 +130,11 @@ class Registration extends StatelessWidget {
         name: name, age: age, phone: phone, mail: mail, image: image!.path);
     await StudentController().addStudents(students);
     studentController.studentImg.value = '';
-    Get.snackbar('Done!', 'Successfully added');
+     Get.snackbar(
+      "Successfull",
+      'Student added successfully',
+      snackPosition: SnackPosition.BOTTOM,
+    );
     clear();
   }
 
