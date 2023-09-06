@@ -6,7 +6,7 @@ import 'package:student_record/constants/const.dart';
 import 'package:student_record/controller/student_controller.dart';
 import 'package:student_record/model/model.dart';
 import 'package:student_record/utils/image/imagePicker.dart';
-import 'package:student_record/validation/validation.dart';
+import 'package:student_record/utils/validation/validation.dart';
 import 'package:student_record/view/edit_page/widgets/form_fields.dart';
 
 // ignore: must_be_immutable

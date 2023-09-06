@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_record/constants/const.dart';
-import 'package:student_record/validation/validation.dart';
+import 'package:student_record/utils/validation/validation.dart';
 
 class EditFormFieldWidget extends StatelessWidget {
   const EditFormFieldWidget({
