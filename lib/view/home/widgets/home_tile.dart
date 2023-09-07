@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:student_record/controller/student_controller.dart';
 import 'package:student_record/model/model.dart';
 
@@ -11,7 +10,7 @@ class HomeListTile extends StatelessWidget {
     required this.studentController, required this.index,
   });
 
-  final RxList<Student> studentList;
+  final List<Student> studentList;
   final StudentController studentController;
   final int index;
 

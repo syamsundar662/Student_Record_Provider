@@ -1,8 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:student_record/constants/const.dart';
-import 'package:student_record/view/add_page/registration.dart';
+import 'package:student_record/view/register/registration.dart';
 import 'package:student_record/view/get_started/widgets/get_started_buttons.dart';
 import 'package:student_record/view/home/main_page.dart';
 
@@ -39,14 +38,14 @@ class GetStartMainSection extends StatelessWidget {
                   GetStartButtons(
                     textTitle: 'New Registration',
                     onpress: () {
-                      Get.to(() => Registration());
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Registration()));
                     },
                   ),
                   kheight,
                   GetStartButtons(
                     textTitle: 'Student Record',
                     onpress: () {
-                      Get.to(() => HomePage());
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                     },
                   )
                 ],

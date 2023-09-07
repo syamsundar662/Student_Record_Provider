@@ -1,17 +1,22 @@
-import 'package:get/state_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:student_record/controller/db_functions.dart';
 import 'package:student_record/model/model.dart';
 
 
-class StudentController extends GetxController{
+class StudentController extends ChangeNotifier{
 
 Sql data = Sql();
-RxList<Student> studentList =  <Student>[].obs;
-RxString studentImg =  ''.obs;
+List<Student> studentList =  <Student>[];
+String studentImg =  '';
+setImage(String img){
+  studentImg =img;
+  notifyListeners();
+
+}
 
 getAllStudents() async {
-  final fetchData = await data.getData();
-  studentList.assignAll(fetchData);
+   studentList = await data.getData();
+   notifyListeners();
 }
 
 addStudents(Student student)async{
@@ -26,6 +31,15 @@ deleteStudent(int id)async{
 
 updateStudent(Student student,int id)async{
  await data.updateTable(student,id);
- getAllStudents();
+ await getAllStudents();
 }
+searchResult(String searchQuery) async {
+    List<Student> list = await data.getData();
+    studentList = list
+        .where((student) =>
+            student.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+        notifyListeners();
+        
+  }
 }

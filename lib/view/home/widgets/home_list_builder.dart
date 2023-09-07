@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:student_record/controller/student_controller.dart';
 import 'package:student_record/model/model.dart';
 import 'package:student_record/view/full_details/full_details.dart';
@@ -12,7 +11,7 @@ class HomeStudentListBuilder extends StatelessWidget {
     required this.studentController,
   });
 
-  final RxList<Student> studentList;
+  final List<Student> studentList;
   final StudentController studentController;
 
   @override
@@ -33,7 +32,7 @@ class HomeStudentListBuilder extends StatelessWidget {
             ),
           ),
           child: HomeListTile(
-            studentList: studentList,
+            studentList: studentController.studentList,
             studentController: studentController,
             index: index,
           ),
